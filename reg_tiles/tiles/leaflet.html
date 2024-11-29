@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+            <title>Regina_basemap.tif</title>
+
+            <!-- Leaflet -->
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@0.7.5/dist/leaflet.css" />
+            <script src="https://unpkg.com/leaflet@0.7.5/dist/leaflet.js"></script>
+
+            <style>
+                body { margin:0; padding:0; }
+                body, table, tr, td, th, div, h1, h2, input { font-family: "Calibri", "Trebuchet MS", "Ubuntu", Serif; font-size: 11pt; }
+                #map { position:absolute; top:0; bottom:0; width:100%; } /* full size */
+                .ctl {
+                    padding: 2px 10px 2px 10px;
+                    background: white;
+                    background: rgba(255,255,255,0.9);
+                    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+                    border-radius: 5px;
+                    text-align: right;
+                }
+                .title {
+                    font-size: 18pt;
+                    font-weight: bold;
+                }
+                .src {
+                    font-size: 10pt;
+                }
+
+            </style>
+
+        </head>
+        <body>
+
+        <div id="map"></div>
+
+        <script>
+        /* **** Leaflet **** */
+
+// Overlay layer (TMS)
+var lyr = L.tileLayer('./{z}/{x}/{y}.png', {
+    tms: 1,
+    opacity: 1,
+    attribution: "",
+    minZoom: 5,
+    maxZoom: 16
+});
+
+// Initialize the map and add only the `lyr` layer
+var map = L.map('map', {
+    center: [50.45087990107255, -104.63147740749274],
+    zoom: 16,
+    minZoom: 10,
+    maxZoom: 16,
+    layers: [lyr] // Add the `lyr` layer directly to the map
+});
+
+// Fit to overlay bounds (SW and NE points with (lat, lon))
+map.fitBounds([[50.39530764918173, -104.50160191895993], [50.50645215296336, -104.76135289602554]]);
+
+
+
+
+        // Add base layers
+        L.control.layers( overlaymaps, {collapsed: false}).addTo(map);
+
+        // Fit to overlay bounds (SW and NE points with (lat, lon))
+        map.fitBounds([[50.39530764918173, -104.50160191895993], [50.50645215296336, -104.76135289602554]]);
+
+        </script>
+
+        </body>
+        </html>
+
+        

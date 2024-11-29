@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Final Project</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+<script src="https://unpkg.com/georaster"></script>
+
+
+
+<style>
+ body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.title-container {
+  height: 110vh;
+  width: 100%;
+  background-image: url('./media/data1.png');
+  background-size: cover; /* Makes the image cover the entire div */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
+.title {
+  font-size: 5rem;
+  background-color: white;
+  width: 60%;
+  border: 2px solid black;
+  padding-bottom: 2rem;
+  padding-left: 1rem;
+  margin: 5rem;
+}
+
+.intro-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-image: url('./media/data1.gif');
+  background-size: cover; /* Ensures the GIF covers the entire div */
+  background-position: center; /* Centers the GIF */
+  background-repeat: no-repeat; /* Prevents the GIF from repeating */
+}
+
+.para {
+  position: relative;
+  background-color: white;
+  padding: 1rem;
+  width: 50%;
+  margin: 5rem;
+  border: 2px solid black;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.buffer {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 16%, rgba(255, 225, 225, 1) 79%, rgba(255, 225, 225, 1) 100%);
+}
+
+.content-container {
+  position: relative;
+  background-color: #ffe1e1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#regina-map-container,
+#montreal-map-container {
+  height: 700px;
+  width: 75%;
+  position: relative;
+}
+
+#regina-map,
+#montreal-map {
+  width: 100%;
+  height: 100%;
+  background-color: #ffe1e1;
+}
+
+#legend {
+  position: absolute;
+  width: 150px;
+  height: auto;
+  right: 10px;
+  z-index: 1000;
+  top: 20%;
+  pointer-events: none; /* Prevent the image from capturing mouse events */
+  border: 2px solid black;
+}
+
+.float {
+  width: 200px;
+  height: 200px;
+  margin: 0;
+  font-size: 1.1rem;
+  border: none;
+  background-image: url('./media/cloud.png');
+  background-size: contain; /* Makes the image cover the entire div */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat;
+  background-color: #ffe1e1;
+}
+
+.note {
+  font-size: 0.8rem;
+  padding: 4rem 1rem 3rem 3rem;
+  color: #a9a9a9;
+}
+
+.buffer2 {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: rgb(255, 225, 225);
+  background: linear-gradient(180deg, rgba(255, 225, 225, 1) 0%, rgba(255, 225, 225, 1) 16%, rgba(163, 162, 157, 1) 79%, rgba(163, 162, 157, 1) 100%);
+}
+
+.content-container2 {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-image: url('./media/data2.gif');
+  background-size: cover; /* Ensures the GIF covers the entire div */
+  background-position: center; /* Centers the GIF */
+  background-repeat: no-repeat; /* Prevents the GIF from repeating */
+}
+
+.buffer3 {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: rgb(163, 162, 157);
+  background: linear-gradient(180deg, rgba(163, 162, 157, 1) 0%, rgba(163, 162, 157, 1) 28%, rgba(255, 255, 255, 1) 79%, rgba(255, 255, 255, 1) 100%);
+}
+
+.storymaps-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.buffer4 {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 28%, rgba(189, 218, 177, 1) 79%, rgba(189, 218, 177, 1) 100%);
+}
+
+.methodology-container {
+  height: 100%;
+  width: 100%;
+  background-color: #bddab1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.photo-collection {
+  margin-bottom: 5rem;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5rem;
+}
+
+.conclusion-images {
+  border: solid 2px black;
+  width: 20rem;
+  height: 12rem;
+}
+
+.video-background {
+  border: solid 2px black;
+  position: relative;
+  width: 20rem; /* Or a specific width */
+  height: 12rem; /* Or a specific height */
+  overflow: hidden;
+}
+
+.video-background video {
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover; /* Ensures the video covers the div */
+  z-index: 10; /* Keeps the video in the background */
+}
+
+iframe {
+  margin: 5rem;
+}
+
+video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  object-fit: contain;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  border: 2px solid black;
+  border-radius: 0px;
+}
+.leaflet-control {
+    z-index: 1000 !important;
+}
+
+</style>
+
+
+</style>
+</head>
+<body>
+
+  <div class="title-container">
+    
+    <div class="title">
+      <p style="font-size: 1rem;">Part 1: Inductive mapping</p>
+      Taking back my data
+      <p style="font-size: 2rem;"></p>
+      <p style="font-size: 2rem;">Scraping my data as a way to scrape my brain <br><br>Patterns, places, and stories.</p>
+      <p style="font-size: 1rem; color: rgb(129, 129, 129);">*All photos and videos on this webpage are visualizations of my data</p>
+    </div>
+
+  </div>
+
+  <div class="intro-container">
+    <div class="para">
+      <p style="font-size: 1.3rem;">
+        Since 2017 I have been using google maps to track my location. Until 2021 I hadn’t even realized. I kept tracking enabled just in case I wanted to 
+        do something with it.   I am thankful I did.
+         Recently I wondered, can I download my own data? Turns out you can, but they don’t make it easy.
+      </p>
+    </div>
+    <div class="para">
+      <p style="font-size: 1.1rem;">
+        135,000 lines of data, stories, patters littered throughout. Facially, its all very structured, rigid, and impersonal.<br> <br>
+        I tried to make it personal. But...
+        Data, data, data, what a dilemma. How can I show my stories? How do I show my without an lables or unrelated data.
+         <br> <br>
+        Well to start, forget the basemap. No google maps, no osm, nada. Just blank <br><br>
+        I’ll make my own. 
+      </p>
+    </div>
+              
+  </div>
+
+  <div class="buffer">
+    <div style="margin-top: 10rem; margin-bottom: 1rem;" class="para">
+      <p style="font-size: 1.1rem;">
+        Below are two maps. The two spaces (cities) I spent the most my time between 2017 and 2021.
+         Zoom in to see small notes and drawings asociatted with places of meaning.
+         Click on the question marks to see a photo taken in that spot. They might seem irrelevant, but they have stories.<br><br> Liminal spaces.
+         The heatmap is my actual location data. The bigger and redder the space, the more I've been there. This rigid data is now being personalized.<br><br>
+         The first map is 2017-2021 and the second is 2021-2024. <br><br>
+         Click the checkmarks in the top right to trigger the two layers <br><br>
+      </p>
+    </div>
+  </div>
+
+
+<div class="content-container">
+ 
+  <div id="regina-map-container">
+      <div id="regina-map">   </div>
+      <img id="legend" src="./media/legend.png" alt="">
+  </div>
+  <div class="para float">
+    <p class="note">
+      I start to remember... places I fogot ive been, Routines I forgot I had. How fast it goes by...
+    </p>
+  </div>
+  <div id="montreal-map-container">
+      <div id="montreal-map">   </div>
+  </div>
+  </div>
+</div>
+
+<div class="buffer2">
+  <div style="margin-top: 10rem; margin-bottom: 1rem;" class="para">
+    <p style="font-size: 1.1rem;">
+      After I spent a while exploring my data a few things started to become clear. <br><br>
+       Patterns! They started to jump out at me. Home, school, work, convenience store, friends house repeat... <br><br>
+        I guess routine is important to me.<br><br>
+         But then I zoomed out of the map, I realized a new routine was forming. <br><br>
+          Ironically, it emerged from my effort to break an old one. I figured, hey I’ll tell that story!
+    </p>
+  </div>
+</div>
+
+<div class="content-container2">
+ 
+</div>
+
+<div class="buffer3">
+  <div style="margin-top: 10rem; margin-bottom: 1rem;" class="title">
+    <p style="font-size: 1rem;">
+      Part II: Story mapping
+    </p>
+    Vermont, first of many
+    <p style="font-size: 1rem;">If the StoryMaps JS iframe doesnt load click <a href="https://uploads.knightlab.com/storymapjs/d729a49852d2722ce4174d329904dcd0/vt-trip/index.html">here</a></p>
+  </div>
+  
+</div>
+
+<div class="storymaps-container">
+  <iframe src="https://uploads.knightlab.com/storymapjs/d729a49852d2722ce4174d329904dcd0/vt-trip/index.html"
+  frameborder="0" width="75%" height="100%">
+  </iframe>
+</div>
+
+<div class="buffer4">
+  <div style="margin-top: 10rem; margin-bottom: 10rem;" class="para">
+    <p style="font-size: 1.2rem;">
+      Thats it! <br><br>
+      I enjoyed this project and the semster! Thanks yall!<br><br><br>
+    </p>
+
+    <p style="font-size: 0.9rem;">Scroll down for methodology, but you dont have to... I'm not forcing you, I swear.</p>
+  </div>
+</div>
+
+
+<div class="methodology-container">
+
+  <div style="padding: 1rem; width: 75%; background-color: white; border: 2px solid black; margin: 5rem; ">
+    <p>To start, I downloaded my data using <a href="https://takeout.google.com/settings/takeout">Google Takeout</a>, which provided a JSON file containing coordinates
+      , start/end times, etc (photo below shows the raw json code). I used Python and pandas to parse this data and convert it into a GeoJSON point file.
+      <br> <br>
+      <br> <br> Also I had to convert the geoJson to base64 (which is why the JavaScript file contains so many random letters). This is so you can run the script without a live/local server. <br> <br>
+       From there, I split the data into two main files: one for 2017–2021 and another for 2021–2024.
+        Using the start and end times, I also created a single long LineString. This LineString was 
+        featured in the intro video of my Story Maps JS project and is also shown in the GIF below!
+        <br> <br>
+      Aseen in the photo below, I created many small drawings, scanned them, and combined them into one large PNG file
+       (over 200 MB!). After editing the photo and aligning the images, I imported them into QGIS.
+        There, I georeferenced this giant image onto the map using <a href="https://plugins.qgis.org/plugins/FreehandRasterGeoreferencer/">
+          Freehand raster georeferencer</a> and exported it as a GeoTIFF.
+          <br> <br> I then used the <a href="https://gdal.org/en/latest/programs/gdal2tiles.html">gdal2tiles</a> Python library to convert the raster into basemap tiles. (This library was awesome, fast, and simple, I highly recommend it!)
+      From there, I used Leaflet to import the basemap and heatmap (generated from the GeoJSON files).
+       I also uploaded a photo layer and added various JavaScript functionalities. For the Vermont
+        intro video and the GIF at the bottom, I used Mapbox, which was a lot of fun to work with. 
+       Additionally, for the data visualizations (background imagery and GIFs) throughout the webpages,
+        I used Mapbox to capture screenshots of the heatmap and LineStrings together.
+        <br><br>
+        The gif that looks like pins on fabric above was actually made by running the other gif through <a href="https://runwayml.com/research/introducing-gen-3-alpha">Gen-3 Alpha</a>. Anyways, I thought it was cool. <br> <br>
+      Finally, the photo at the very top of the webpage was created by importing all my data into QGIS and using many colours.
+      </p>
+  </div>
+
+<div class="photo-collection">
+
+  <img class="conclusion-images" src="./media/jsonpic.jpg" alt="">
+
+  <img class="conclusion-images" src="./media/drawings.jpg" alt="">
+
+  <div class="video-background">
+    <video autoplay muted loop playsinline>
+      <source src="./media/enddata.mp4" type="video/mp4">
+    </video>
+  </div>
+
+</div>
+
+</div>
+<script src="script.js" await></script>
+</body>
+</html>
